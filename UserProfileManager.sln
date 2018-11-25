@@ -7,6 +7,14 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "UserProfilesStore", "UserPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserProfiles", "UserProfiles\UserProfiles.csproj", "{2B2DD851-1149-422F-93D4-69DF785C65AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{0EF626C9-C0AD-4E20-94EC-CF5308A15A2F}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Pallavi\WorkMeat\Assignment\Assignment.sql = ..\..\..\..\..\Pallavi\WorkMeat\Assignment\Assignment.sql
+		..\..\..\..\..\Pallavi\WorkMeat\Assignment\database.mdb = ..\..\..\..\..\Pallavi\WorkMeat\Assignment\database.mdb
+		..\..\..\..\..\Pallavi\WorkMeat\Assignment\FieldSpecification.xls = ..\..\..\..\..\Pallavi\WorkMeat\Assignment\FieldSpecification.xls
+		..\..\..\..\..\Pallavi\WorkMeat\Assignment\UserProfileEntryForm.docx = ..\..\..\..\..\Pallavi\WorkMeat\Assignment\UserProfileEntryForm.docx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
