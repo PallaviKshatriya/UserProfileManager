@@ -15,6 +15,8 @@ namespace UserProfiles.Model
 {
    public class UserProfileRepository
     {
+        public string ConnectionString { get; } = Properties.Settings.Default["ConnectionString"].ToString();
+
         public List<UserLevelCategory> GetUserLevelCategories()
         {
             string queryUserLevelCategory = @"
@@ -27,7 +29,8 @@ FROM [dbo].[UserLevelCategory] c
 	INNER JOIN [dbo].[LocalSystem] s ON s.LocalSystemId = c.UserLevelCategoryLocalSystemId AND s.LocalSystemName IS NOT NULL";
 
             var userLevelCategories = new List<UserLevelCategory>();
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -64,7 +67,7 @@ FROM [dbo].[UserLevelCategory] c
                 ";
 
             UserProfile profile = null;
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -100,7 +103,7 @@ FROM [dbo].[UserLevelCategory] c
             string querySystems = @"SELECT LocalSystemId AS Id, LocalSystemName AS Name FROM [dbo].[LocalSystem]";
 
             var systems = new List<LocalSystem>();
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -123,7 +126,7 @@ FROM [dbo].[UserLevelCategory] c
             string querySystems = @"SELECT [BranchCode], [BranchName] FROM [dbo].[Branch]";
 
             var branches = new List<Branch>();
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -155,7 +158,7 @@ FROM [dbo].[UserLevelCategory] c
         public DataTable GetGridColumns()
         {
             var query = "SELECT [BranchCode],[BranchName] FROM [dbo].[Branch]";
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -244,7 +247,7 @@ FROM
 
             AggregationBindingList<UserProfileSystemSetting> settings = new AggregationBindingList<UserProfileSystemSetting>();
 
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -288,8 +291,7 @@ FROM
                     UPDATE        
                 ";
 
-            UserProfile profile = null;
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 

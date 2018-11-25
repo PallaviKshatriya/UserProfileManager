@@ -15,25 +15,26 @@ namespace UserProfiles
         public FormUserProfile()
         {
             InitializeComponent();
-            RegisterCustomColumns();
+            PreLoadOperations();
 
             int userProfileId = 1;
 
             var repository = new UserProfileRepository();
             //var systems = repository.GetSystems();
             //var branches = repository.GetBranches();
-            var categories = repository.GetUserLevelCategories();
-            var userProfile = repository.GetUserProfile(userProfileId);
-            var userSystemSettings = repository.GetSystemSettings(userProfileId);
+            List<UserLevelCategory> categories = repository.GetUserLevelCategories();
+            UserProfile userProfile = repository.GetUserProfile(userProfileId);
+            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = repository.GetSystemSettings(userProfileId);
 
-            userProfileSystemSettingBindingSource.DataSource = userSystemSettings;
-            userLevelCategoryBindingSource.DataSource = categories;
-            BindUserProfileFields(userProfile);
+            bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
+            bindingSourceUserLevelCategory.DataSource = categories;
+            bindingSourceUserProfile.DataSource = userProfile;
+            //BindUserProfileFields(userProfile);
 
-            PostLoad();
+            PostLoadOperations();
         }
 
-        private void PostLoad()
+        private void PostLoadOperations()
         {
             //dataGridViewUserSettings.Height = dataGridViewUserSettings.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridViewUserSettings.ColumnHeadersHeight + 2;
             //dataGridViewUserSettings.Width = dataGridViewUserSettings.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridViewUserSettings.RowHeadersWidth + 2;
@@ -59,6 +60,7 @@ namespace UserProfiles
                 DataGridViewComboBoxEditingControl comboBox = e.Control as DataGridViewComboBoxEditingControl;
                 comboBox.DataSource = bindingList;
                 comboBox.SelectedValue = setting.Category.Id;
+                comboBox.Data
                 comboBox.SelectionChangeCommitted -= this.comboBox_SelectionChangeCommitted;
                 comboBox.SelectionChangeCommitted += this.comboBox_SelectionChangeCommitted;
             }
@@ -72,7 +74,7 @@ namespace UserProfiles
         private BindingList<UserLevelCategory> GetSystemCategories(UserProfileSystemSetting setting)
         {
             var bindingList = new BindingList<UserLevelCategory>();
-            var categories = userLevelCategoryBindingSource.DataSource as List<UserLevelCategory>;
+            var categories = bindingSourceUserLevelCategory.DataSource as List<UserLevelCategory>;
             var filteredCategories = categories.Where(c => c.LocalSystemId == setting.LocalSystem.Id).ToList();
             filteredCategories.ForEach(fc => bindingList.Add(fc));
             return bindingList;
@@ -84,7 +86,7 @@ namespace UserProfiles
             e.Cancel = true;
         }
         */
-        private void RegisterCustomColumns()
+        private void PreLoadOperations()
         {
             this.dataGridViewUserSettings.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(DataGridViewUserSettings_EditingControlShowing);
             this.localSystemDataGridViewTextBoxColumn.DataPropertyName = "LocalSystem->Name";
@@ -115,6 +117,9 @@ namespace UserProfiles
                 MailAddress = textBoxUserEmailAddress.Text,
                 Name = textBoxUserFullName.Text
             };
+
+            //dataGridViewUserSettings.EndEdit();
+            var userSystemSettings = bindingSourceUserProfileSystemSetting.DataSource as AggregationBindingList<UserProfileSystemSetting>;
         }
     }
 }
