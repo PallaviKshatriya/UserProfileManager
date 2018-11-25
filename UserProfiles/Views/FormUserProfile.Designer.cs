@@ -46,13 +46,13 @@
             this.labelUserProfileId = new System.Windows.Forms.Label();
             this.groupBoxProfileFields = new System.Windows.Forms.GroupBox();
             this.groupBoxUserAccess = new System.Windows.Forms.GroupBox();
-            this.groupBoxActions = new System.Windows.Forms.GroupBox();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewUserSettings = new System.Windows.Forms.DataGridView();
             this.branchLNDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.branchBRDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.branchPRDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.branchDFDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.groupBoxActions = new System.Windows.Forms.GroupBox();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.localSystemDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.categoryDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -60,8 +60,8 @@
             this.userProfileSystemSettingBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxProfileFields.SuspendLayout();
             this.groupBoxUserAccess.SuspendLayout();
-            this.groupBoxActions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUserSettings)).BeginInit();
+            this.groupBoxActions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.userLevelCategoryBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.userProfileSystemSettingBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -237,39 +237,16 @@
             // 
             // groupBoxUserAccess
             // 
+            this.groupBoxUserAccess.AutoSize = true;
             this.groupBoxUserAccess.Controls.Add(this.dataGridViewUserSettings);
             this.groupBoxUserAccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxUserAccess.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxUserAccess.Location = new System.Drawing.Point(24, 455);
             this.groupBoxUserAccess.Name = "groupBoxUserAccess";
-            this.groupBoxUserAccess.Size = new System.Drawing.Size(1901, 474);
+            this.groupBoxUserAccess.Size = new System.Drawing.Size(1901, 644);
             this.groupBoxUserAccess.TabIndex = 42;
             this.groupBoxUserAccess.TabStop = false;
             this.groupBoxUserAccess.Text = "User Access";
-            // 
-            // groupBoxActions
-            // 
-            this.groupBoxActions.Controls.Add(this.btnEdit);
-            this.groupBoxActions.Controls.Add(this.btnSave);
-            this.groupBoxActions.Controls.Add(this.btnClose);
-            this.groupBoxActions.Controls.Add(this.btnDelete);
-            this.groupBoxActions.Controls.Add(this.btnCancel);
-            this.groupBoxActions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBoxActions.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxActions.Location = new System.Drawing.Point(24, 961);
-            this.groupBoxActions.Name = "groupBoxActions";
-            this.groupBoxActions.Size = new System.Drawing.Size(1901, 140);
-            this.groupBoxActions.TabIndex = 43;
-            this.groupBoxActions.TabStop = false;
-            this.groupBoxActions.Text = "Actions";
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalSystem";
-            this.dataGridViewTextBoxColumn1.HeaderText = "System";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 200;
             // 
             // dataGridViewUserSettings
             // 
@@ -288,8 +265,8 @@
             this.dataGridViewUserSettings.Location = new System.Drawing.Point(6, 52);
             this.dataGridViewUserSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridViewUserSettings.Name = "dataGridViewUserSettings";
-            this.dataGridViewUserSettings.RowTemplate.Height = 40;
-            this.dataGridViewUserSettings.Size = new System.Drawing.Size(1873, 389);
+            this.dataGridViewUserSettings.RowTemplate.Height = 20;
+            this.dataGridViewUserSettings.Size = new System.Drawing.Size(1873, 550);
             this.dataGridViewUserSettings.TabIndex = 38;
             // 
             // branchLNDataGridViewCheckBoxColumn
@@ -319,6 +296,31 @@
             this.branchDFDataGridViewCheckBoxColumn.HeaderText = "DF";
             this.branchDFDataGridViewCheckBoxColumn.Name = "branchDFDataGridViewCheckBoxColumn";
             this.branchDFDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // groupBoxActions
+            // 
+            this.groupBoxActions.AutoSize = true;
+            this.groupBoxActions.Controls.Add(this.btnEdit);
+            this.groupBoxActions.Controls.Add(this.btnSave);
+            this.groupBoxActions.Controls.Add(this.btnClose);
+            this.groupBoxActions.Controls.Add(this.btnDelete);
+            this.groupBoxActions.Controls.Add(this.btnCancel);
+            this.groupBoxActions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBoxActions.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxActions.Location = new System.Drawing.Point(24, 1105);
+            this.groupBoxActions.Name = "groupBoxActions";
+            this.groupBoxActions.Size = new System.Drawing.Size(1403, 159);
+            this.groupBoxActions.TabIndex = 43;
+            this.groupBoxActions.TabStop = false;
+            this.groupBoxActions.Text = "Actions";
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalSystem";
+            this.dataGridViewTextBoxColumn1.HeaderText = "System";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 200;
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -356,9 +358,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1974, 1136);
+            this.ClientSize = new System.Drawing.Size(1974, 1412);
             this.Controls.Add(this.groupBoxActions);
             this.Controls.Add(this.groupBoxProfileFields);
             this.Controls.Add(this.lblFormheader);
@@ -369,8 +372,8 @@
             this.groupBoxProfileFields.ResumeLayout(false);
             this.groupBoxProfileFields.PerformLayout();
             this.groupBoxUserAccess.ResumeLayout(false);
-            this.groupBoxActions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUserSettings)).EndInit();
+            this.groupBoxActions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.userLevelCategoryBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.userProfileSystemSettingBindingSource)).EndInit();
             this.ResumeLayout(false);
