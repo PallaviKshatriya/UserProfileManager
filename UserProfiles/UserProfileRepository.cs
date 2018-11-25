@@ -17,9 +17,14 @@ namespace UserProfiles.Model
     {
         public List<UserLevelCategory> GetUserLevelCategories()
         {
-            string queryUserLevelCategory = @"SELECT UserLevelCategoryId AS Id, UserLevelCategoryName AS Name, s.LocalSystemId AS SystemId, s.LocalSystemName AS SystemName 
-                FROM [dbo].[UserLevelCategory] c
-                INNER JOIN [dbo].[LocalSystem] s ON s.LocalSystemId = c.UserLevelCategoryLocalSystemId AND s.LocalSystemName IS NOT NULL";
+            string queryUserLevelCategory = @"
+SELECT 
+	UserLevelCategoryId [Id], 
+	ISNULL(UserLevelCategoryName,' ') [Name], 
+	s.LocalSystemId [SystemId], 
+	s.LocalSystemName [SystemName] 
+FROM [dbo].[UserLevelCategory] c
+	INNER JOIN [dbo].[LocalSystem] s ON s.LocalSystemId = c.UserLevelCategoryLocalSystemId AND s.LocalSystemName IS NOT NULL";
 
             var userLevelCategories = new List<UserLevelCategory>();
             using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\v11.0;Initial Catalog=UserProfiles;Integrated Security=True"))
@@ -198,8 +203,8 @@ namespace UserProfiles.Model
 	CAST(CASE WHEN [BR] = 0 THEN 1 ELSE 0 END AS BIT) [BR],
 	CAST(CASE WHEN [PR] = 0 THEN 1 ELSE 0 END AS BIT) [PR],
 	CAST(CASE WHEN [DF] = 0 THEN 1 ELSE 0 END AS BIT) [DF],
-	CategoryId,
-	CategoryName
+	COALESCE(CategoryId, EmptyCategoryId, -1) [CategoryId],
+	ISNULL(CategoryName, ' ') [CategoryName]
 FROM 
 (
 	SELECT 
@@ -209,15 +214,23 @@ FROM
 		MIN(Case BranchCode When 'BR' Then sb.LocalSystemBranchStatus End) [BR],
 		MIN(Case BranchCode When 'PR' Then sb.LocalSystemBranchStatus End) [PR],
 		MIN(Case BranchCode When 'DF' Then sb.LocalSystemBranchStatus End) [DF],
-		uc.UserLevelCategoryId [CategoryId],
-		uc.UserLevelCategoryName [CategoryName]
+		uc.UserLevelCategoryId  [CategoryId],
+		uc.UserLevelCategoryName [CategoryName],
+		EmptyCategories.UserLevelCategoryId [EmptyCategoryId]
 	FROM 
 		[dbo].[LocalSystem] s 
 		LEFT JOIN [dbo].[LocalSystemBranch] sb ON s.LocalSystemId = sb.LocalSystemBranchLocalSystemId AND sb.LocalSystemBranchUserProfileId = @userProfileId 
 		LEFT JOIN [dbo].[Branch] b ON b.BranchCode = sb.LocalSystemBranchCode AND b.BranchCode IS NOT NULL
 		LEFT JOIN [dbo].[UserProfile] u ON u.UserProfileId = sb.LocalSystemBranchUserProfileId
-		LEFT JOIN [dbo].[UserAccess] ua ON ua.UserAccessUserProfileId = u.UserProfileId AND ua.UserAccessLocalSystemId = s.LocalSystemId AND ua.UserAccessStatus = 0 AND ua.UserAccessUserProfileId = @userProfileId
+		LEFT JOIN [dbo].[UserAccess] ua ON ua.UserAccessUserProfileId = u.UserProfileId 
+			AND ua.UserAccessLocalSystemId = s.LocalSystemId 
+			AND ua.UserAccessStatus = 0 
+			AND ua.UserAccessUserProfileId = @userProfileId
 		LEFT JOIN [dbo].[UserLevelCategory] uc ON uc.UserLevelCategoryId = ua.UserAccessUserLevelCategoryId 
+		LEFT JOIN 
+		(
+			SELECT c.UserLevelCategoryId, ls.LocalSystemId FROM [dbo].[UserLevelCategory] c INNER JOIN [dbo].[LocalSystem] ls ON c.UserLevelCategoryLocalSystemId = ls.LocalSystemId AND c.UserLevelCategoryName IS NULL
+		) EmptyCategories ON s.LocalSystemId = EmptyCategories.LocalSystemId
     WHERE 
 		s.LocalSystemName IS NOT NULL
 		
@@ -225,7 +238,8 @@ FROM
 		s.LocalSystemId, 
 		s.LocalSystemName,
 		uc.UserLevelCategoryId,
-		uc.UserLevelCategoryName
+		uc.UserLevelCategoryName,
+		EmptyCategories.UserLevelCategoryId
 ) AS UserProfileSettings";
 
             AggregationBindingList<UserProfileSystemSetting> settings = new AggregationBindingList<UserProfileSystemSetting>();

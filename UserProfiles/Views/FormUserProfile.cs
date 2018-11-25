@@ -29,6 +29,14 @@ namespace UserProfiles
             userProfileSystemSettingBindingSource.DataSource = userSystemSettings;
             userLevelCategoryBindingSource.DataSource = categories;
             BindUserProfileFields(userProfile);
+
+            PostLoad();
+        }
+
+        private void PostLoad()
+        {
+            //dataGridViewUserSettings.Height = dataGridViewUserSettings.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridViewUserSettings.ColumnHeadersHeight + 2;
+            //dataGridViewUserSettings.Width = dataGridViewUserSettings.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridViewUserSettings.RowHeadersWidth + 2;
         }
 
         private void BindUserProfileFields(UserProfile profile)

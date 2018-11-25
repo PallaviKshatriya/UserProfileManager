@@ -106,6 +106,8 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Read" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\UserProfile.sql">
@@ -132,5 +134,9 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <None Include="Scripts\Read\SelectUserLevelCategories.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Read\SelectSystemSettings.sql" />
   </ItemGroup>
 </Project>

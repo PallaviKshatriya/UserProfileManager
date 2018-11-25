@@ -44,24 +44,26 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.labelUserProfileId = new System.Windows.Forms.Label();
-            this.dataGridViewUserSettings = new System.Windows.Forms.DataGridView();
-            this.userLevelCategoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.userProfileSystemSettingBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxProfileFields = new System.Windows.Forms.GroupBox();
             this.groupBoxUserAccess = new System.Windows.Forms.GroupBox();
             this.groupBoxActions = new System.Windows.Forms.GroupBox();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewUserSettings = new System.Windows.Forms.DataGridView();
+            this.branchLNDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.branchBRDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.branchPRDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.branchDFDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.localSystemDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.branchLnDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.branchBrDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.branchPrDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.branchDfDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.categoryDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUserSettings)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.userLevelCategoryBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.userProfileSystemSettingBindingSource)).BeginInit();
+            this.userLevelCategoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.userProfileSystemSettingBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxProfileFields.SuspendLayout();
             this.groupBoxUserAccess.SuspendLayout();
             this.groupBoxActions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUserSettings)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userLevelCategoryBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userProfileSystemSettingBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // lblFormheader
@@ -213,35 +215,6 @@
             this.labelUserProfileId.TabIndex = 39;
             this.labelUserProfileId.Text = "<UserProfileId>";
             // 
-            // dataGridViewUserSettings
-            // 
-            this.dataGridViewUserSettings.AllowUserToAddRows = false;
-            this.dataGridViewUserSettings.AllowUserToDeleteRows = false;
-            this.dataGridViewUserSettings.AutoGenerateColumns = false;
-            this.dataGridViewUserSettings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewUserSettings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.localSystemDataGridViewTextBoxColumn,
-            this.branchLnDataGridViewCheckBoxColumn,
-            this.branchBrDataGridViewCheckBoxColumn,
-            this.branchPrDataGridViewCheckBoxColumn,
-            this.branchDfDataGridViewCheckBoxColumn,
-            this.categoryDataGridViewComboBoxColumn});
-            this.dataGridViewUserSettings.DataSource = this.userProfileSystemSettingBindingSource;
-            this.dataGridViewUserSettings.Location = new System.Drawing.Point(6, 52);
-            this.dataGridViewUserSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridViewUserSettings.Name = "dataGridViewUserSettings";
-            this.dataGridViewUserSettings.RowTemplate.Height = 40;
-            this.dataGridViewUserSettings.Size = new System.Drawing.Size(1873, 389);
-            this.dataGridViewUserSettings.TabIndex = 38;
-            // 
-            // userLevelCategoryBindingSource
-            // 
-            this.userLevelCategoryBindingSource.DataSource = typeof(UserProfiles.Model.UserLevelCategory);
-            // 
-            // userProfileSystemSettingBindingSource
-            // 
-            this.userProfileSystemSettingBindingSource.DataSource = typeof(UserProfiles.Model.UserProfileSystemSetting);
-            // 
             // groupBoxProfileFields
             // 
             this.groupBoxProfileFields.Controls.Add(this.labelTextUserProfileId);
@@ -290,37 +263,76 @@
             this.groupBoxActions.TabStop = false;
             this.groupBoxActions.Text = "Actions";
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalSystem";
+            this.dataGridViewTextBoxColumn1.HeaderText = "System";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 200;
+            // 
+            // dataGridViewUserSettings
+            // 
+            this.dataGridViewUserSettings.AllowUserToAddRows = false;
+            this.dataGridViewUserSettings.AllowUserToDeleteRows = false;
+            this.dataGridViewUserSettings.AutoGenerateColumns = false;
+            this.dataGridViewUserSettings.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridViewUserSettings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.localSystemDataGridViewTextBoxColumn,
+            this.branchLNDataGridViewCheckBoxColumn,
+            this.branchBRDataGridViewCheckBoxColumn,
+            this.branchPRDataGridViewCheckBoxColumn,
+            this.branchDFDataGridViewCheckBoxColumn,
+            this.categoryDataGridViewComboBoxColumn});
+            this.dataGridViewUserSettings.DataSource = this.userProfileSystemSettingBindingSource;
+            this.dataGridViewUserSettings.Location = new System.Drawing.Point(6, 52);
+            this.dataGridViewUserSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dataGridViewUserSettings.Name = "dataGridViewUserSettings";
+            this.dataGridViewUserSettings.RowTemplate.Height = 40;
+            this.dataGridViewUserSettings.Size = new System.Drawing.Size(1873, 389);
+            this.dataGridViewUserSettings.TabIndex = 38;
+            // 
+            // branchLNDataGridViewCheckBoxColumn
+            // 
+            this.branchLNDataGridViewCheckBoxColumn.DataPropertyName = "IsBranchLnActive";
+            this.branchLNDataGridViewCheckBoxColumn.HeaderText = "LN";
+            this.branchLNDataGridViewCheckBoxColumn.Name = "branchLNDataGridViewCheckBoxColumn";
+            this.branchLNDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // branchBRDataGridViewCheckBoxColumn
+            // 
+            this.branchBRDataGridViewCheckBoxColumn.DataPropertyName = "IsBranchBrActive";
+            this.branchBRDataGridViewCheckBoxColumn.HeaderText = "BR";
+            this.branchBRDataGridViewCheckBoxColumn.Name = "branchBRDataGridViewCheckBoxColumn";
+            this.branchBRDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // branchPRDataGridViewCheckBoxColumn
+            // 
+            this.branchPRDataGridViewCheckBoxColumn.DataPropertyName = "IsBranchPrActive";
+            this.branchPRDataGridViewCheckBoxColumn.HeaderText = "PR";
+            this.branchPRDataGridViewCheckBoxColumn.Name = "branchPRDataGridViewCheckBoxColumn";
+            this.branchPRDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // branchDFDataGridViewCheckBoxColumn
+            // 
+            this.branchDFDataGridViewCheckBoxColumn.DataPropertyName = "IsBranchPrActive";
+            this.branchDFDataGridViewCheckBoxColumn.HeaderText = "DF";
+            this.branchDFDataGridViewCheckBoxColumn.Name = "branchDFDataGridViewCheckBoxColumn";
+            this.branchDFDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "LocalSystem";
+            this.dataGridViewTextBoxColumn2.HeaderText = "System";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
             // localSystemDataGridViewTextBoxColumn
             // 
             this.localSystemDataGridViewTextBoxColumn.DataPropertyName = "LocalSystem";
             this.localSystemDataGridViewTextBoxColumn.HeaderText = "System";
             this.localSystemDataGridViewTextBoxColumn.Name = "localSystemDataGridViewTextBoxColumn";
             this.localSystemDataGridViewTextBoxColumn.ReadOnly = true;
-            this.localSystemDataGridViewTextBoxColumn.Width = 200;
-            // 
-            // branchLnDataGridViewCheckBoxColumn
-            // 
-            this.branchLnDataGridViewCheckBoxColumn.DataPropertyName = "LN";
-            this.branchLnDataGridViewCheckBoxColumn.HeaderText = "LN";
-            this.branchLnDataGridViewCheckBoxColumn.Name = "branchLnDataGridViewCheckBoxColumn";
-            // 
-            // branchBrDataGridViewCheckBoxColumn
-            // 
-            this.branchBrDataGridViewCheckBoxColumn.DataPropertyName = "BR";
-            this.branchBrDataGridViewCheckBoxColumn.HeaderText = "BR";
-            this.branchBrDataGridViewCheckBoxColumn.Name = "branchBrDataGridViewCheckBoxColumn";
-            // 
-            // branchPrDataGridViewCheckBoxColumn
-            // 
-            this.branchPrDataGridViewCheckBoxColumn.DataPropertyName = "PR";
-            this.branchPrDataGridViewCheckBoxColumn.HeaderText = "PR";
-            this.branchPrDataGridViewCheckBoxColumn.Name = "branchPrDataGridViewCheckBoxColumn";
-            // 
-            // branchDfDataGridViewCheckBoxColumn
-            // 
-            this.branchDfDataGridViewCheckBoxColumn.DataPropertyName = "DF";
-            this.branchDfDataGridViewCheckBoxColumn.HeaderText = "DF";
-            this.branchDfDataGridViewCheckBoxColumn.Name = "branchDfDataGridViewCheckBoxColumn";
             // 
             // categoryDataGridViewComboBoxColumn
             // 
@@ -330,7 +342,15 @@
             this.categoryDataGridViewComboBoxColumn.HeaderText = "Permission";
             this.categoryDataGridViewComboBoxColumn.Name = "categoryDataGridViewComboBoxColumn";
             this.categoryDataGridViewComboBoxColumn.ValueMember = "Id";
-            this.categoryDataGridViewComboBoxColumn.Width = 400;
+            this.categoryDataGridViewComboBoxColumn.Width = 200;
+            // 
+            // userLevelCategoryBindingSource
+            // 
+            this.userLevelCategoryBindingSource.DataSource = typeof(UserProfiles.Model.UserLevelCategory);
+            // 
+            // userProfileSystemSettingBindingSource
+            // 
+            this.userProfileSystemSettingBindingSource.DataSource = typeof(UserProfiles.Model.UserProfileSystemSetting);
             // 
             // FormUserProfile
             // 
@@ -346,13 +366,13 @@
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "FormUserProfile";
             this.Text = "User Profile Entry Form";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUserSettings)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.userLevelCategoryBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.userProfileSystemSettingBindingSource)).EndInit();
             this.groupBoxProfileFields.ResumeLayout(false);
             this.groupBoxProfileFields.PerformLayout();
             this.groupBoxUserAccess.ResumeLayout(false);
             this.groupBoxActions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUserSettings)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userLevelCategoryBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.userProfileSystemSettingBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -375,18 +395,20 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label labelUserProfileId;
-        private System.Windows.Forms.DataGridView dataGridViewUserSettings;
         private System.Windows.Forms.BindingSource userProfileSystemSettingBindingSource;
         private System.Windows.Forms.BindingSource userLevelCategoryBindingSource;
         private System.Windows.Forms.GroupBox groupBoxProfileFields;
         private System.Windows.Forms.GroupBox groupBoxUserAccess;
         private System.Windows.Forms.GroupBox groupBoxActions;
+        private System.Windows.Forms.DataGridView dataGridViewUserSettings;
         private System.Windows.Forms.DataGridViewTextBoxColumn localSystemDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn branchLnDataGridViewCheckBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn branchBrDataGridViewCheckBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn branchPrDataGridViewCheckBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn branchDfDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn branchLNDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn branchBRDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn branchPRDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn branchDFDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewComboBoxColumn categoryDataGridViewComboBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }
 }
 
