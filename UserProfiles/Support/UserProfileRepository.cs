@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace UserProfiles.Model
 {
-   public class UserProfileRepository
+   public class UserProfileRepository : IRepository
     {
         public string ConnectionString { get; } = Properties.Settings.Default["ConnectionString"].ToString();
 
@@ -144,58 +144,6 @@ FROM [dbo].[UserLevelCategory] c
             return branches;
         }
 
-        /*
-        public List<Branch> GetBranches() => new List<Branch>
-            {
-                new Branch { Code = "LN", Name = "London" },
-                new Branch { Code = "BR", Name = "Brussels" },
-                new Branch { Code = "PR", Name = "Paris" },
-                new Branch { Code = "DF", Name = "Dusseldorf" }
-            };
-        */
-
-        /*
-        public DataTable GetGridColumns()
-        {
-            var query = "SELECT [BranchCode],[BranchName] FROM [dbo].[Branch]";
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
-
-                using (SqlDataAdapter sda = new SqlDataAdapter(query, connection))
-                {
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        return dt;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please Check your Username & password");
-                        return null;
-                    }
-                }
-            }
-        }
-        */
-
-        /*
-        public AggregationBindingList<UserProfileSystemSetting> GetSystemSettings(int userProfileId)
-        {
-            var system1 = new LocalSystem { Id = 1, Name = "System A" };
-            var system2 = new LocalSystem { Id = 2, Name = "System B" };
-            var system3 = new LocalSystem { Id = 3, Name = "System C" };
-            return new AggregationBindingList<UserProfileSystemSetting>
-            {
-                new UserProfileSystemSetting { System = system1 , LN = true, BR = false, DF = true, PR = true, Category = new UserLevelCategory { Id = 3, Name = "Front Office Dept 1", SystemId = 1} },
-                new UserProfileSystemSetting { System = system2 , LN = false, BR = false, DF = false, PR = true, Category = new UserLevelCategory { Id = 9, Name = "System Administrator", SystemId = 2} },
-                new UserProfileSystemSetting { System = system3 , LN = true, BR = true, DF = true, PR = false, Category = new UserLevelCategory { Id = 17, Name = "Middle Office Senior Manager", SystemId = 3 }},
-            };
-        }
-        */
-
         public AggregationBindingList<UserProfileSystemSetting> GetSystemSettings(int userProfileId)
         {
             string querySettings =
@@ -309,5 +257,42 @@ FROM
             
         }
 
+        public void UpdateUserSystemSettings(AggregationBindingList<UserProfileSystemSetting> userSystemSettings)
+        {
+            //foreach(var setting in userSystemSettings)
+            //{
+            //    setting.Category
+            //}
+
+            ////1. update UserAccess
+            //string queryUpdateUserAccess =
+            //    @"
+            //        UPDATE        
+            //    ";
+
+            ////2. update LocalSystemBranch
+            //string queryUpdateLocalSystemBranch =
+
+
+            ////3. update user profile details
+            //string queryUpdateUserProfile =
+
+
+            //using (SqlConnection connection = new SqlConnection(ConnectionString))
+            //{
+            //    connection.Open();
+
+            //    using (SqlDataAdapter sda = new SqlDataAdapter(querySystems, connection))
+            //    {
+            //        //sda.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
+            //        DataTable dt = new DataTable();
+            //        sda.Fill(dt);
+            //        if (dt.Rows.Count == 1 && dt.Rows[0] != null)
+            //        {
+
+            //        }
+            //    }
+            //}
+        }
     }
 }

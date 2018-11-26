@@ -48,7 +48,8 @@
     <Compile Include="Model\UserLevelCategory.cs" />
     <Compile Include="Support\AggregationBindingList.cs" />
     <Compile Include="Model\UserProfile.cs" />
-    <Compile Include="UserProfileRepository.cs" />
+    <Compile Include="Support\IRepository.cs" />
+    <Compile Include="Support\UserProfileRepository.cs" />
     <Compile Include="Model\UserProfileSystemSetting.cs" />
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Views\FormUserProfile.cs">

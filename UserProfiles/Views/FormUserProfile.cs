@@ -12,6 +12,7 @@ namespace UserProfiles
 {
     public partial class FormUserProfile : Form
     {
+        public IRepository Repository { get; set; }
         public FormUserProfile()
         {
             InitializeComponent();
@@ -19,12 +20,12 @@ namespace UserProfiles
 
             int userProfileId = 1;
 
-            var repository = new UserProfileRepository();
+            Repository = new UserProfileRepository();
             //var systems = repository.GetSystems();
             //var branches = repository.GetBranches();
-            List<UserLevelCategory> categories = repository.GetUserLevelCategories();
-            UserProfile userProfile = repository.GetUserProfile(userProfileId);
-            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = repository.GetSystemSettings(userProfileId);
+            List<UserLevelCategory> categories = Repository.GetUserLevelCategories();
+            UserProfile userProfile = Repository.GetUserProfile(userProfileId);
+            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(userProfileId);
 
             bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
             bindingSourceUserLevelCategory.DataSource = categories;
@@ -60,7 +61,7 @@ namespace UserProfiles
                 DataGridViewComboBoxEditingControl comboBox = e.Control as DataGridViewComboBoxEditingControl;
                 comboBox.DataSource = bindingList;
                 comboBox.SelectedValue = setting.Category.Id;
-                comboBox.Data
+                //comboBox.Data
                 comboBox.SelectionChangeCommitted -= this.comboBox_SelectionChangeCommitted;
                 comboBox.SelectionChangeCommitted += this.comboBox_SelectionChangeCommitted;
             }
@@ -120,6 +121,7 @@ namespace UserProfiles
 
             //dataGridViewUserSettings.EndEdit();
             var userSystemSettings = bindingSourceUserProfileSystemSetting.DataSource as AggregationBindingList<UserProfileSystemSetting>;
+            Repository.UpdateUserSystemSettings(userSystemSettings);
         }
     }
 }

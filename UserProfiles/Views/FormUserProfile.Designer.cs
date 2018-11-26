@@ -48,15 +48,11 @@
             this.groupBoxProfileFields = new System.Windows.Forms.GroupBox();
             this.groupBoxUserAccess = new System.Windows.Forms.GroupBox();
             this.dataGridViewUserSettings = new System.Windows.Forms.DataGridView();
-            this.groupBoxActions = new System.Windows.Forms.GroupBox();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.branchLNDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.branchBRDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.branchPRDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.branchDFDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBoxActions = new System.Windows.Forms.GroupBox();
             this.bindingSourceUserProfile = new System.Windows.Forms.BindingSource(this.components);
             this.localSystemDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.categoryDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -244,7 +240,7 @@
             this.groupBoxUserAccess.Margin = new System.Windows.Forms.Padding(1);
             this.groupBoxUserAccess.Name = "groupBoxUserAccess";
             this.groupBoxUserAccess.Padding = new System.Windows.Forms.Padding(1);
-            this.groupBoxUserAccess.Size = new System.Drawing.Size(713, 199);
+            this.groupBoxUserAccess.Size = new System.Drawing.Size(713, 311);
             this.groupBoxUserAccess.TabIndex = 42;
             this.groupBoxUserAccess.TabStop = false;
             this.groupBoxUserAccess.Text = "User Access";
@@ -263,7 +259,7 @@
             this.branchDFDataGridViewCheckBoxColumn,
             this.categoryDataGridViewComboBoxColumn});
             this.dataGridViewUserSettings.DataSource = this.bindingSourceUserProfileSystemSetting;
-            this.dataGridViewUserSettings.Location = new System.Drawing.Point(2, 22);
+            this.dataGridViewUserSettings.Location = new System.Drawing.Point(6, 22);
             this.dataGridViewUserSettings.Margin = new System.Windows.Forms.Padding(1);
             this.dataGridViewUserSettings.Name = "dataGridViewUserSettings";
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -274,48 +270,8 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewUserSettings.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewUserSettings.Size = new System.Drawing.Size(702, 163);
+            this.dataGridViewUserSettings.Size = new System.Drawing.Size(702, 279);
             this.dataGridViewUserSettings.TabIndex = 38;
-            // 
-            // groupBoxActions
-            // 
-            this.groupBoxActions.Controls.Add(this.buttonEdit);
-            this.groupBoxActions.Controls.Add(this.buttonSave);
-            this.groupBoxActions.Controls.Add(this.buttonClose);
-            this.groupBoxActions.Controls.Add(this.buttonDelete);
-            this.groupBoxActions.Controls.Add(this.buttonCancel);
-            this.groupBoxActions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBoxActions.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxActions.Location = new System.Drawing.Point(9, 403);
-            this.groupBoxActions.Margin = new System.Windows.Forms.Padding(1);
-            this.groupBoxActions.Name = "groupBoxActions";
-            this.groupBoxActions.Padding = new System.Windows.Forms.Padding(1);
-            this.groupBoxActions.Size = new System.Drawing.Size(713, 59);
-            this.groupBoxActions.TabIndex = 43;
-            this.groupBoxActions.TabStop = false;
-            this.groupBoxActions.Text = "Actions";
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalSystem";
-            this.dataGridViewTextBoxColumn1.HeaderText = "System";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 200;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "LocalSystem";
-            this.dataGridViewTextBoxColumn2.HeaderText = "System";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.DataPropertyName = "LocalSystem";
-            this.dataGridViewTextBoxColumn3.HeaderText = "System";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
             // 
             // branchLNDataGridViewCheckBoxColumn
             // 
@@ -345,12 +301,23 @@
             this.branchDFDataGridViewCheckBoxColumn.Name = "branchDFDataGridViewCheckBoxColumn";
             this.branchDFDataGridViewCheckBoxColumn.Width = 50;
             // 
-            // dataGridViewTextBoxColumn4
+            // groupBoxActions
             // 
-            this.dataGridViewTextBoxColumn4.DataPropertyName = "LocalSystem";
-            this.dataGridViewTextBoxColumn4.HeaderText = "System";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.groupBoxActions.Controls.Add(this.buttonEdit);
+            this.groupBoxActions.Controls.Add(this.buttonSave);
+            this.groupBoxActions.Controls.Add(this.buttonClose);
+            this.groupBoxActions.Controls.Add(this.buttonDelete);
+            this.groupBoxActions.Controls.Add(this.buttonCancel);
+            this.groupBoxActions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBoxActions.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxActions.Location = new System.Drawing.Point(11, 504);
+            this.groupBoxActions.Margin = new System.Windows.Forms.Padding(1);
+            this.groupBoxActions.Name = "groupBoxActions";
+            this.groupBoxActions.Padding = new System.Windows.Forms.Padding(1);
+            this.groupBoxActions.Size = new System.Drawing.Size(713, 59);
+            this.groupBoxActions.TabIndex = 43;
+            this.groupBoxActions.TabStop = false;
+            this.groupBoxActions.Text = "Actions";
             // 
             // bindingSourceUserProfile
             // 
@@ -388,7 +355,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(738, 482);
+            this.ClientSize = new System.Drawing.Size(738, 573);
             this.Controls.Add(this.groupBoxActions);
             this.Controls.Add(this.groupBoxProfileFields);
             this.Controls.Add(this.lblFormheader);
@@ -431,8 +398,6 @@
         private System.Windows.Forms.GroupBox groupBoxUserAccess;
         private System.Windows.Forms.GroupBox groupBoxActions;
         private System.Windows.Forms.DataGridView dataGridViewUserSettings;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.BindingSource bindingSourceUserProfile;
         private System.Windows.Forms.DataGridViewTextBoxColumn localSystemDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn branchLNDataGridViewCheckBoxColumn;
@@ -440,8 +405,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn branchPRDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn branchDFDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewComboBoxColumn categoryDataGridViewComboBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     }
 }
 
