@@ -12,34 +12,49 @@ namespace UserProfiles
 {
     public partial class FormUserProfile : Form
     {
+        public IRepository Repository { get; set; }
+        public int UserProfileId { get; set; } = 1; //This is hardcoded for the purposes of testing
+        
         public FormUserProfile()
-        {
+        { 
             InitializeComponent();
-            RegisterCustomColumns();
 
-            int userProfileId = 1;
+            try
+            {
+                PreLoadOperations();
+                Repository = new UserProfileRepository();
 
-            var repository = new UserProfileRepository();
-            //var systems = repository.GetSystems();
-            //var branches = repository.GetBranches();
-            var categories = repository.GetUserLevelCategories();
-            var userProfile = repository.GetUserProfile(userProfileId);
-            var userSystemSettings = repository.GetSystemSettings(userProfileId);
+                List<UserLevelCategory> categories = Repository.GetUserLevelCategories();
+                UserProfile userProfile = Repository.GetUserProfile(UserProfileId);
+                AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(UserProfileId);
 
-            userProfileSystemSettingBindingSource.DataSource = userSystemSettings;
-            userLevelCategoryBindingSource.DataSource = categories;
-            BindUserProfileFields(userProfile);
+                bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
+                bindingSourceUserLevelCategory.DataSource = categories;
+                bindingSourceUserProfile.DataSource = userProfile;
+
+                if (userProfile.IsAdmin && userProfile.Status == Status.Active)
+                {
+                    EnableAdminMode();
+                }
+                else
+                {
+                    this.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The following error was encountered: {0}", ex.Message);
+            }
         }
-
-        private void BindUserProfileFields(UserProfile profile)
+        private void EnableAdminMode()
         {
-            labelUserProfileId.Text = profile.Id.ToString();
-            textBoxUserDomainName.Text = profile.DomainName;
-            textBoxUserEmailAddress.Text = profile.MailAddress;
-            textBoxUserFullName.Text = profile.Name;
-            checkBoxIsUserAdmin.Checked = profile.IsAdmin;
+            foreach(Control ctrl in this.Controls)
+                if (ctrl.GetType() == typeof(GroupBox) && ctrl.Text != "Actions")
+                        ((GroupBox)ctrl).Enabled = false;
+            buttonCancel.Enabled = false;
+            buttonSave.Enabled = false;
+            buttonDelete.Enabled = false;
         }
-
         void DataGridViewUserSettings_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             if (this.dataGridViewUserSettings.CurrentCell.ColumnIndex == this.categoryDataGridViewComboBoxColumn.Index)
@@ -64,49 +79,91 @@ namespace UserProfiles
         private BindingList<UserLevelCategory> GetSystemCategories(UserProfileSystemSetting setting)
         {
             var bindingList = new BindingList<UserLevelCategory>();
-            var categories = userLevelCategoryBindingSource.DataSource as List<UserLevelCategory>;
+            var categories = bindingSourceUserLevelCategory.DataSource as List<UserLevelCategory>;
             var filteredCategories = categories.Where(c => c.LocalSystemId == setting.LocalSystem.Id).ToList();
             filteredCategories.ForEach(fc => bindingList.Add(fc));
             return bindingList;
         }
 
-        /*
-        private void dataGridViewUserSettings_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            e.Cancel = true;
-        }
-        */
-        private void RegisterCustomColumns()
+        private void PreLoadOperations()
         {
             this.dataGridViewUserSettings.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(DataGridViewUserSettings_EditingControlShowing);
             this.localSystemDataGridViewTextBoxColumn.DataPropertyName = "LocalSystem->Name";
             this.categoryDataGridViewComboBoxColumn.DataPropertyName = "Category->Id";
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object sender, EventArgs e)
         {
-            this.Refresh();
-        }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            //DataTable changedRows = CT(dataGridViewUserSettings.DataSource, DataTable).GetChanges(DataRowState.Modified).Rows
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            var upObject = new UserProfile
+            try
             {
-                DomainName = textBoxUserDomainName.Text,
-                IsAdmin = checkBoxIsUserAdmin.Checked,
-                MailAddress = textBoxUserEmailAddress.Text,
-                Name = textBoxUserFullName.Text
-            };
+                bindingSourceUserProfile.Clear();
+                bindingSourceUserProfileSystemSetting.Clear();
+                UserProfile userProfile = Repository.GetUserProfile(UserProfileId);
+                AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(UserProfileId);
+
+                bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
+                bindingSourceUserProfile.DataSource = userProfile;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The following error was encountered: {0}", ex.Message);
+            }
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Repository.DeleteUserDetails(UserProfileId);
+                this.Enabled = false;
+                MessageBox.Show("Deleted successfully!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The following error was encountered: {0}", ex.Message);
+            }
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var userSystemSettings = bindingSourceUserProfileSystemSetting.DataSource as AggregationBindingList<UserProfileSystemSetting>;
+                Repository.UpdateUserSystemSettings(userSystemSettings);
+                var userProfile = bindingSourceUserProfile.DataSource as UserProfile;
+                Repository.UpdateUserProfile(userProfile);
+                MessageBox.Show("Saved successfully!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The following error was encountered: {0}", ex.Message);
+            }
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (Control ctrl in this.Controls)
+                {
+                    if (ctrl.GetType() == typeof(GroupBox))
+                    {
+                        ctrl.Enabled = true;
+                        buttonCancel.Enabled = true;
+                        buttonSave.Enabled = true;
+                        buttonDelete.Enabled = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The following error was encountered: {0}", ex.Message);
+            }
         }
     }
 }

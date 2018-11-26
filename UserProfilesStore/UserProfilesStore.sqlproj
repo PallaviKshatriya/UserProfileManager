@@ -106,6 +106,9 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Read" />
+    <Folder Include="Scripts\Change" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\UserProfile.sql">
@@ -132,5 +135,11 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <None Include="Scripts\Read\SelectUserLevelCategories.sql" />
+    <None Include="Scripts\Change\UpsertSystemSettings.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Read\SelectSystemSettings.sql" />
+    <None Include="Scripts\Change\DeleteAccess.sql" />
   </ItemGroup>
 </Project>

@@ -48,7 +48,9 @@
     <Compile Include="Model\UserLevelCategory.cs" />
     <Compile Include="Support\AggregationBindingList.cs" />
     <Compile Include="Model\UserProfile.cs" />
-    <Compile Include="UserProfileRepository.cs" />
+    <Compile Include="Support\IRepository.cs" />
+    <Compile Include="Support\Queries.cs" />
+    <Compile Include="Support\UserProfileRepository.cs" />
     <Compile Include="Model\UserProfileSystemSetting.cs" />
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Views\FormUserProfile.cs">
@@ -72,6 +74,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\UserProfiles.Model.UserProfile.datasource" />
     <None Include="Properties\DataSources\Users.Model.UserLevelCategory.datasource" />
     <None Include="Properties\DataSources\Users.Model.UserProfileSystemSetting.datasource" />
     <None Include="Properties\Settings.settings">
