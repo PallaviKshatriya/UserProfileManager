@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
+//This has been inspired from an article on the web to use aggregate bindings
+
 namespace UserProfiles
 {
     /// <summary>

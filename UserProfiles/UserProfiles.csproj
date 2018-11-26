@@ -49,6 +49,7 @@
     <Compile Include="Support\AggregationBindingList.cs" />
     <Compile Include="Model\UserProfile.cs" />
     <Compile Include="Support\IRepository.cs" />
+    <Compile Include="Support\Queries.cs" />
     <Compile Include="Support\UserProfileRepository.cs" />
     <Compile Include="Model\UserProfileSystemSetting.cs" />
     <Compile Include="Model\Branch.cs" />

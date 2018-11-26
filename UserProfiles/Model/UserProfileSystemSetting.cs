@@ -55,6 +55,8 @@ namespace UserProfiles.Model
 
         public int UserAccessId { get; set; }
 
+        public int UserProfileId { get; set; }
+
         public UserLevelCategory Category { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

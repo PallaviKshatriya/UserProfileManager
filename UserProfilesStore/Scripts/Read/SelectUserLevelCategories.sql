@@ -1,4 +1,4 @@
-﻿USE [UserProfiles]
+﻿USE [Assignment]
 SELECT 
 	UserLevelCategoryId [Id], 
 	ISNULL(UserLevelCategoryName,' ') [Name], 

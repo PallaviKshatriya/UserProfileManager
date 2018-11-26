@@ -44,6 +44,7 @@ FROM
 	INNER JOIN [dbo].[LocalSystem] s ON s.LocalSystemId = ua.UserAccessLocalSystemId
 WHERE
 	u.UserProfileId = @userProfileId
+	AND ua.UserAccessStatus = 0
 ORDER BY 
 	SystemId
 ;
