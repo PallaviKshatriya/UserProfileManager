@@ -32,15 +32,35 @@ namespace UserProfiles
             bindingSourceUserLevelCategory.DataSource = categories;
             bindingSourceUserProfile.DataSource = userProfile;
             //BindUserProfileFields(userProfile);
-            if (userProfile.IsAdmin== false)
+            if (userProfile.IsAdmin== true)
             {
                 AdminUserModeOfOperation();
+            }
+            else
+            {
+                this.Enabled = false;
             }
                 PostLoadOperations();
         }
         private void AdminUserModeOfOperation()
         {
-                this.Enabled = false;
+            foreach(Control ctrl in this.Controls)
+            {
+                if (ctrl.GetType() == typeof(GroupBox))
+                    if(ctrl.Text =="Actions")
+                    {
+                        buttonCancel.Enabled = false;
+                        buttonSave.Enabled = false;
+                        buttonDelete.Enabled = false;   
+                    }
+                else
+                    {
+                        ((GroupBox)ctrl).Enabled = false;
+                    }
+                if (ctrl.GetType() == typeof(Button))
+                    ((Button)ctrl).Enabled= false;
+                    
+            }
         }
 
         private void PostLoadOperations()
@@ -130,6 +150,20 @@ namespace UserProfiles
             //dataGridViewUserSettings.EndEdit();
             var userSystemSettings = bindingSourceUserProfileSystemSetting.DataSource as AggregationBindingList<UserProfileSystemSetting>;
             Repository.UpdateUserSystemSettings(userSystemSettings);
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl.GetType() == typeof(GroupBox))
+                {
+                    ctrl.Enabled = true;
+                    buttonCancel.Enabled = true;
+                    buttonSave.Enabled = true;
+                    buttonDelete.Enabled = true;
+                }
+            }
         }
     }
 }
