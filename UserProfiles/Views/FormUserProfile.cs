@@ -14,7 +14,8 @@ namespace UserProfiles
     {
         public IRepository Repository { get; set; }
         public FormUserProfile()
-        {
+        { 
+            
             InitializeComponent();
             PreLoadOperations();
 
@@ -31,8 +32,15 @@ namespace UserProfiles
             bindingSourceUserLevelCategory.DataSource = categories;
             bindingSourceUserProfile.DataSource = userProfile;
             //BindUserProfileFields(userProfile);
-
-            PostLoadOperations();
+            if (userProfile.IsAdmin== false)
+            {
+                AdminUserModeOfOperation();
+            }
+                PostLoadOperations();
+        }
+        private void AdminUserModeOfOperation()
+        {
+                this.Enabled = false;
         }
 
         private void PostLoadOperations()
