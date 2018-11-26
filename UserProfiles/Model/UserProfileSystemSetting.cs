@@ -8,6 +8,8 @@ namespace UserProfiles.Model
 {
     public class UserProfileSystemSetting : INotifyPropertyChanged
     {
+        //This is being changed to test the INotifyPropertyChanged implementation to listen to only changed properties
+
         private bool _isBranchLnActive;
         private bool _isBranchBrActive;
         private bool _isBranchPrActive;
@@ -50,6 +52,9 @@ namespace UserProfiles.Model
                 NotifyPropertyChanged("IsBranchDfActive");
             }
         }
+
+        public int UserAccessId { get; set; }
+
         public UserLevelCategory Category { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

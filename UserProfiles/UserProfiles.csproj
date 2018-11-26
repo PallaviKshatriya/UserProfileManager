@@ -73,7 +73,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="Properties\DataSources\UserProfiles.Model.UserProfile.datasource" />
     <None Include="Properties\DataSources\Users.Model.UserLevelCategory.datasource" />
     <None Include="Properties\DataSources\Users.Model.UserProfileSystemSetting.datasource" />

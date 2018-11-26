@@ -13,43 +13,40 @@ namespace UserProfiles
     public partial class FormUserProfile : Form
     {
         public IRepository Repository { get; set; }
+        public int UserProfileId { get; set; } = 1;
+        
         public FormUserProfile()
-        {
+        { 
             InitializeComponent();
             PreLoadOperations();
-
-            int userProfileId = 1;
-
             Repository = new UserProfileRepository();
-            //var systems = repository.GetSystems();
-            //var branches = repository.GetBranches();
+
             List<UserLevelCategory> categories = Repository.GetUserLevelCategories();
-            UserProfile userProfile = Repository.GetUserProfile(userProfileId);
-            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(userProfileId);
+            UserProfile userProfile = Repository.GetUserProfile(UserProfileId);
+            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(UserProfileId);
 
             bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
             bindingSourceUserLevelCategory.DataSource = categories;
             bindingSourceUserProfile.DataSource = userProfile;
-            //BindUserProfileFields(userProfile);
 
-            PostLoadOperations();
+            if (userProfile.IsAdmin)
+            {
+                EnableAdminMode();
+            }
+            else
+            {
+                this.Enabled = false;
+            }
         }
-
-        private void PostLoadOperations()
+        private void EnableAdminMode()
         {
-            //dataGridViewUserSettings.Height = dataGridViewUserSettings.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridViewUserSettings.ColumnHeadersHeight + 2;
-            //dataGridViewUserSettings.Width = dataGridViewUserSettings.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridViewUserSettings.RowHeadersWidth + 2;
+            foreach(Control ctrl in this.Controls)
+                if (ctrl.GetType() == typeof(GroupBox) && ctrl.Text != "Actions")
+                        ((GroupBox)ctrl).Enabled = false;
+            buttonCancel.Enabled = false;
+            buttonSave.Enabled = false;
+            buttonDelete.Enabled = false;
         }
-
-        private void BindUserProfileFields(UserProfile profile)
-        {
-            labelUserProfileId.Text = profile.Id.ToString();
-            textBoxUserDomainName.Text = profile.DomainName;
-            textBoxUserEmailAddress.Text = profile.MailAddress;
-            textBoxUserFullName.Text = profile.Name;
-            checkBoxIsUserAdmin.Checked = profile.IsAdmin;
-        }
-
         void DataGridViewUserSettings_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             if (this.dataGridViewUserSettings.CurrentCell.ColumnIndex == this.categoryDataGridViewComboBoxColumn.Index)
@@ -61,7 +58,6 @@ namespace UserProfiles
                 DataGridViewComboBoxEditingControl comboBox = e.Control as DataGridViewComboBoxEditingControl;
                 comboBox.DataSource = bindingList;
                 comboBox.SelectedValue = setting.Category.Id;
-                //comboBox.Data
                 comboBox.SelectionChangeCommitted -= this.comboBox_SelectionChangeCommitted;
                 comboBox.SelectionChangeCommitted += this.comboBox_SelectionChangeCommitted;
             }
@@ -81,12 +77,6 @@ namespace UserProfiles
             return bindingList;
         }
 
-        /*
-        private void dataGridViewUserSettings_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            e.Cancel = true;
-        }
-        */
         private void PreLoadOperations()
         {
             this.dataGridViewUserSettings.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(DataGridViewUserSettings_EditingControlShowing);
@@ -94,22 +84,29 @@ namespace UserProfiles
             this.categoryDataGridViewComboBoxColumn.DataPropertyName = "Category->Id";
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void buttonCancel_Click(object sender, EventArgs e)
         {
-            this.Refresh();
+            
+            bindingSourceUserProfile.Clear();
+            bindingSourceUserProfileSystemSetting.Clear();
+            UserProfile userProfile = Repository.GetUserProfile(UserProfileId);
+            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(UserProfileId);
+
+            bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
+            bindingSourceUserProfile.DataSource = userProfile;
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void buttonDelete_Click(object sender, EventArgs e)
         {
-            //DataTable changedRows = CT(dataGridViewUserSettings.DataSource, DataTable).GetChanges(DataRowState.Modified).Rows
+           Repository.DeleteUserDetails(UserProfileId);
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void buttonSave_Click(object sender, EventArgs e)
         {
             var upObject = new UserProfile
             {
@@ -122,6 +119,20 @@ namespace UserProfiles
             //dataGridViewUserSettings.EndEdit();
             var userSystemSettings = bindingSourceUserProfileSystemSetting.DataSource as AggregationBindingList<UserProfileSystemSetting>;
             Repository.UpdateUserSystemSettings(userSystemSettings);
+        }
+
+        private void buttonEdit_Click(object sender, EventArgs e)
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl.GetType() == typeof(GroupBox))
+                {
+                    ctrl.Enabled = true;
+                    buttonCancel.Enabled = true;
+                    buttonSave.Enabled = true;
+                    buttonDelete.Enabled = true;
+                }
+            }
         }
     }
 }

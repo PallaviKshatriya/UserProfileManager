@@ -205,13 +205,11 @@ ORDER BY
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(queryBranchSettings, connection))
                 {
-                    adapter.TableMappings.Add("BranchSettings", "BranchSettings");
-                    adapter.TableMappings.Add("CategorySettings", "CategorySettings");
+                    adapter.TableMappings.Add("Table", "BranchSettings");
+                    adapter.TableMappings.Add("Table1", "CategorySettings");
                     adapter.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
                     string query = adapter.SelectCommand.CommandText;
                     DataSet ds = new DataSet();
-                    //adapter.TableMappings.Add("BranchSettings", "CategorySettings");
-                    //DataTable dt = new DataTable();
                     adapter.Fill(ds);
 
                     foreach (DataRow row in ds.Tables["BranchSettings"].Rows)
@@ -234,6 +232,7 @@ ORDER BY
                     foreach (DataRow row in ds.Tables["CategorySettings"].Rows)
                     {
                         var setting = settings.First(s => s.LocalSystem.Id == (int)row["SystemId"]);
+                        setting.UserAccessId = (int)row["AccessId"];
                         setting.Category = (row["CategoryId"] is DBNull) ? new UserLevelCategory() : new UserLevelCategory()
                         {
                             Id = (int)row["CategoryId"],
@@ -245,29 +244,26 @@ ORDER BY
             }
             return settings;
         }
-        public void DeleteUserData(int userProfileId)
+      
+        public void DeleteUserDetails(int UserProfileId)
         {
-            string querySystems =
-                @"
-                    UPDATE        
-                ";
+
+            string sqlUserAccess = "BEGIN UPDATE [dbo].[UserAccess] SET[UserAccessStatus] = -1 WHERE [UserAccessUserProfileId] = @userProfileId;",
+                   sqlUserSettings = "UPDATE [dbo].[LocalSystemBranch] SET[LocalSystemBranchStatus] = -1 WHERE [LocalSystemBranchUserProfileId] = @userProfileId;",
+                   sqlUserProfile = "UPDATE [dbo].[UserProfile] SET[UserProfileStatus] = -1 WHERE [UserProfileOperatorId] = @userProfileId; END;";
+
+            string sql = string.Format("{0}{1}{2}", sqlUserAccess,sqlUserSettings,sqlUserProfile);
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                connection.Open();
-
-                using (SqlDataAdapter sda = new SqlDataAdapter(querySystems, connection))
+                using (SqlCommand cmdUpdate = new SqlCommand(sql, connection))
                 {
-                    sda.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    if (dt.Rows.Count == 1 && dt.Rows[0] != null)
-                    {
-                   
-                    }
+                    cmdUpdate.Parameters.AddWithValue("@userProfileId", UserProfileId);
+                    connection.Open();
+                    int recs = cmdUpdate.ExecuteNonQuery();
                 }
+                
             }
-            
         }
 
         public void UpdateUserSystemSettings(AggregationBindingList<UserProfileSystemSetting> userSystemSettings)
