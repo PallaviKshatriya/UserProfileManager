@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 
 namespace UserProfiles.Model
 {
@@ -146,52 +140,62 @@ FROM [dbo].[UserLevelCategory] c
 
         public AggregationBindingList<UserProfileSystemSetting> GetSystemSettings(int userProfileId)
         {
-            string querySettings =
-                @"SELECT 
+            string queryBranchSettings =
+                @"
+SELECT 
     SystemId,
 	SystemName,
 	CAST(CASE WHEN [LN] = 0 THEN 1 ELSE 0 END AS BIT) [LN],
 	CAST(CASE WHEN [BR] = 0 THEN 1 ELSE 0 END AS BIT) [BR],
 	CAST(CASE WHEN [PR] = 0 THEN 1 ELSE 0 END AS BIT) [PR],
-	CAST(CASE WHEN [DF] = 0 THEN 1 ELSE 0 END AS BIT) [DF],
-	COALESCE(CategoryId, EmptyCategoryId, -1) [CategoryId],
-	ISNULL(CategoryName, ' ') [CategoryName]
-FROM 
-(
+	CAST(CASE WHEN [DF] = 0 THEN 1 ELSE 0 END AS BIT) [DF]
+FROM (
 	SELECT 
-        s.LocalSystemId [SystemId],
+		s.LocalSystemId [SystemId],
 		s.LocalSystemName [SystemName], 
-		MIN(Case BranchCode When 'LN' Then sb.LocalSystemBranchStatus End) [LN],
-		MIN(Case BranchCode When 'BR' Then sb.LocalSystemBranchStatus End) [BR],
-		MIN(Case BranchCode When 'PR' Then sb.LocalSystemBranchStatus End) [PR],
-		MIN(Case BranchCode When 'DF' Then sb.LocalSystemBranchStatus End) [DF],
-		uc.UserLevelCategoryId  [CategoryId],
-		uc.UserLevelCategoryName [CategoryName],
-		EmptyCategories.UserLevelCategoryId [EmptyCategoryId]
+		MAX(CASE BranchCode WHEN 'LN' THEN sb.LocalSystemBranchStatus END) [LN],
+		MAX(CASE BranchCode WHEN 'BR' THEN sb.LocalSystemBranchStatus END) [BR],
+		MAX(CASE BranchCode WHEN 'PR' THEN sb.LocalSystemBranchStatus END) [PR],
+		MAX(CASE BranchCode WHEN 'DF' THEN sb.LocalSystemBranchStatus END) [DF]
 	FROM 
-		[dbo].[LocalSystem] s 
-		LEFT JOIN [dbo].[LocalSystemBranch] sb ON s.LocalSystemId = sb.LocalSystemBranchLocalSystemId AND sb.LocalSystemBranchUserProfileId = @userProfileId 
+		[dbo].[LocalSystemBranch] sb
+		RIGHT JOIN [dbo].[LocalSystem] s  ON s.LocalSystemId = sb.LocalSystemBranchLocalSystemId AND sb.LocalSystemBranchUserProfileId = @userProfileId 
 		LEFT JOIN [dbo].[Branch] b ON b.BranchCode = sb.LocalSystemBranchCode AND b.BranchCode IS NOT NULL
 		LEFT JOIN [dbo].[UserProfile] u ON u.UserProfileId = sb.LocalSystemBranchUserProfileId
-		LEFT JOIN [dbo].[UserAccess] ua ON ua.UserAccessUserProfileId = u.UserProfileId 
-			AND ua.UserAccessLocalSystemId = s.LocalSystemId 
-			AND ua.UserAccessStatus = 0 
-			AND ua.UserAccessUserProfileId = @userProfileId
-		LEFT JOIN [dbo].[UserLevelCategory] uc ON uc.UserLevelCategoryId = ua.UserAccessUserLevelCategoryId 
-		LEFT JOIN 
-		(
-			SELECT c.UserLevelCategoryId, ls.LocalSystemId FROM [dbo].[UserLevelCategory] c INNER JOIN [dbo].[LocalSystem] ls ON c.UserLevelCategoryLocalSystemId = ls.LocalSystemId AND c.UserLevelCategoryName IS NULL
-		) EmptyCategories ON s.LocalSystemId = EmptyCategories.LocalSystemId
-    WHERE 
+	WHERE 
 		s.LocalSystemName IS NOT NULL
-		
 	GROUP BY 
 		s.LocalSystemId, 
-		s.LocalSystemName,
-		uc.UserLevelCategoryId,
-		uc.UserLevelCategoryName,
-		EmptyCategories.UserLevelCategoryId
-) AS UserProfileSettings";
+		s.LocalSystemName
+) AS BranchSettings
+ORDER BY 
+	SystemId;
+SELECT
+	[SystemId],
+	[SystemName],
+	[CategoryId],
+	[CategoryName],
+	[AccessId]
+FROM
+(
+	SELECT 
+		s.LocalSystemId [SystemId],
+		s.LocalSystemName [SystemName],
+		uc.UserLevelCategoryId [CategoryId],
+		uc.UserLevelCategoryName [CategoryName],
+		ua.UserAccessId [AccessId]
+	FROM
+		[dbo].[UserAccess] ua 
+		INNER JOIN [dbo].[UserProfile] u ON ua.UserAccessUserProfileId = u.UserProfileId 
+		INNER JOIN [dbo].[UserLevelCategory] uc ON uc.UserLevelCategoryId = ua.UserAccessUserLevelCategoryId 
+		INNER JOIN [dbo].[LocalSystem] s ON s.LocalSystemId = ua.UserAccessLocalSystemId
+	WHERE
+		u.UserProfileId = @userProfileId
+) AS CategorySettings
+ORDER BY 
+	SystemId
+;
+";
 
             AggregationBindingList<UserProfileSystemSetting> settings = new AggregationBindingList<UserProfileSystemSetting>();
 
@@ -199,34 +203,43 @@ FROM
             {
                 connection.Open();
 
-                using (SqlDataAdapter sda = new SqlDataAdapter(querySettings, connection))
+                using (SqlDataAdapter adapter = new SqlDataAdapter(queryBranchSettings, connection))
                 {
-                    sda.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
-                    string query = sda.SelectCommand.CommandText;
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
+                    adapter.TableMappings.Add("BranchSettings", "BranchSettings");
+                    adapter.TableMappings.Add("CategorySettings", "CategorySettings");
+                    adapter.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
+                    string query = adapter.SelectCommand.CommandText;
+                    DataSet ds = new DataSet();
+                    //adapter.TableMappings.Add("BranchSettings", "CategorySettings");
+                    //DataTable dt = new DataTable();
+                    adapter.Fill(ds);
 
-                    foreach (DataRow row in dt.Rows)
+                    foreach (DataRow row in ds.Tables["BranchSettings"].Rows)
                     {
                         settings.Add(
                             new UserProfileSystemSetting
                             {
-                                LocalSystem = (row["CategoryId"] is DBNull) ? new LocalSystem() : new LocalSystem
+                                LocalSystem = (row["SystemId"] is DBNull) ? new LocalSystem() : new LocalSystem
                                 {
-                                    Id = (int) row["SystemId"],
+                                    Id = (int)row["SystemId"],
                                     Name = row["SystemName"].ToString()
                                 },
                                 IsBranchLnActive = (bool)row["LN"],
                                 IsBranchBrActive = (bool)row["BR"],
                                 IsBranchPrActive = (bool)row["PR"],
-                                IsBranchDfActive = (bool)row["DF"],
-                                Category = (row["CategoryId"] is DBNull) ? new UserLevelCategory() : new UserLevelCategory()
-                                {
-                                    Id = (int) row["CategoryId"],
-                                    Name = row["CategoryName"].ToString(),
-                                    LocalSystemId = (int) row["SystemId"]
-                                }
+                                IsBranchDfActive = (bool)row["DF"]
                             });
+                    }
+
+                    foreach (DataRow row in ds.Tables["CategorySettings"].Rows)
+                    {
+                        var setting = settings.First(s => s.LocalSystem.Id == (int)row["SystemId"]);
+                        setting.Category = (row["CategoryId"] is DBNull) ? new UserLevelCategory() : new UserLevelCategory()
+                        {
+                            Id = (int)row["CategoryId"],
+                            Name = row["CategoryName"].ToString(),
+                            LocalSystemId = (int)row["SystemId"]
+                        };
                     }
                 }
             }
@@ -259,40 +272,42 @@ FROM
 
         public void UpdateUserSystemSettings(AggregationBindingList<UserProfileSystemSetting> userSystemSettings)
         {
-            //foreach(var setting in userSystemSettings)
-            //{
-            //    setting.Category
-            //}
+            StringBuilder queries = new StringBuilder();
+            foreach (var setting in userSystemSettings)
+            {
+                queries.AppendLine(@"UPDATE ");
+            }
 
-            ////1. update UserAccess
-            //string queryUpdateUserAccess =
-            //    @"
-            //        UPDATE        
-            //    ";
+            /*
+            //1. update UserAccess
+            string queryUpdateUserAccess =
+                @"
+                    UPDATE        
+                ";
 
-            ////2. update LocalSystemBranch
-            //string queryUpdateLocalSystemBranch =
-
-
-            ////3. update user profile details
-            //string queryUpdateUserProfile =
+            //2. update LocalSystemBranch
+            string queryUpdateLocalSystemBranch =
 
 
-            //using (SqlConnection connection = new SqlConnection(ConnectionString))
-            //{
-            //    connection.Open();
+            //3. update user profile details
+            string queryUpdateUserProfile =
 
-            //    using (SqlDataAdapter sda = new SqlDataAdapter(querySystems, connection))
-            //    {
-            //        //sda.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
-            //        DataTable dt = new DataTable();
-            //        sda.Fill(dt);
-            //        if (dt.Rows.Count == 1 && dt.Rows[0] != null)
-            //        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
 
-            //        }
-            //    }
-            //}
+                using (SqlDataAdapter sda = new SqlDataAdapter(querySystems, connection))
+                {
+                    //sda.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
+                    DataTable dt = new DataTable();
+                    sda.Fill(dt);
+                    if (dt.Rows.Count == 1 && dt.Rows[0] != null)
+                    {
+
+                    }
+                }
+            }
+            */
         }
     }
 }

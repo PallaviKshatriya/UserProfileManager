@@ -1,48 +1,49 @@
-﻿USE [UserProfiles]
+﻿USE [Assignment]
 DECLARE @userProfileId INT
 SET @userProfileId = 1
+
 SELECT 
     SystemId,
 	SystemName,
 	CAST(CASE WHEN [LN] = 0 THEN 1 ELSE 0 END AS BIT) [LN],
 	CAST(CASE WHEN [BR] = 0 THEN 1 ELSE 0 END AS BIT) [BR],
 	CAST(CASE WHEN [PR] = 0 THEN 1 ELSE 0 END AS BIT) [PR],
-	CAST(CASE WHEN [DF] = 0 THEN 1 ELSE 0 END AS BIT) [DF],
-	COALESCE(CategoryId, EmptyCategoryId, -1) [CategoryId],
-	ISNULL(CategoryName, ' ') [CategoryName]
-FROM 
-(
+	CAST(CASE WHEN [DF] = 0 THEN 1 ELSE 0 END AS BIT) [DF]
+FROM (
 	SELECT 
-        s.LocalSystemId [SystemId],
+		s.LocalSystemId [SystemId],
 		s.LocalSystemName [SystemName], 
-		MIN(Case BranchCode When 'LN' Then sb.LocalSystemBranchStatus End) [LN],
-		MIN(Case BranchCode When 'BR' Then sb.LocalSystemBranchStatus End) [BR],
-		MIN(Case BranchCode When 'PR' Then sb.LocalSystemBranchStatus End) [PR],
-		MIN(Case BranchCode When 'DF' Then sb.LocalSystemBranchStatus End) [DF],
-		uc.UserLevelCategoryId  [CategoryId],
-		uc.UserLevelCategoryName [CategoryName],
-		EmptyCategories.UserLevelCategoryId [EmptyCategoryId]
+		MAX(CASE BranchCode WHEN 'LN' THEN sb.LocalSystemBranchStatus END) [LN],
+		MAX(CASE BranchCode WHEN 'BR' THEN sb.LocalSystemBranchStatus END) [BR],
+		MAX(CASE BranchCode WHEN 'PR' THEN sb.LocalSystemBranchStatus END) [PR],
+		MAX(CASE BranchCode WHEN 'DF' THEN sb.LocalSystemBranchStatus END) [DF]
 	FROM 
-		[dbo].[LocalSystem] s 
-		LEFT JOIN [dbo].[LocalSystemBranch] sb ON s.LocalSystemId = sb.LocalSystemBranchLocalSystemId AND sb.LocalSystemBranchUserProfileId = @userProfileId 
+		[dbo].[LocalSystemBranch] sb
+		RIGHT JOIN [dbo].[LocalSystem] s  ON s.LocalSystemId = sb.LocalSystemBranchLocalSystemId AND sb.LocalSystemBranchUserProfileId = @userProfileId 
 		LEFT JOIN [dbo].[Branch] b ON b.BranchCode = sb.LocalSystemBranchCode AND b.BranchCode IS NOT NULL
 		LEFT JOIN [dbo].[UserProfile] u ON u.UserProfileId = sb.LocalSystemBranchUserProfileId
-		LEFT JOIN [dbo].[UserAccess] ua ON ua.UserAccessUserProfileId = u.UserProfileId 
-			AND ua.UserAccessLocalSystemId = s.LocalSystemId 
-			AND ua.UserAccessStatus = 0 
-			AND ua.UserAccessUserProfileId = @userProfileId
-		LEFT JOIN [dbo].[UserLevelCategory] uc ON uc.UserLevelCategoryId = ua.UserAccessUserLevelCategoryId 
-		LEFT JOIN 
-		(
-			SELECT c.UserLevelCategoryId, ls.LocalSystemId FROM [dbo].[UserLevelCategory] c INNER JOIN [dbo].[LocalSystem] ls ON c.UserLevelCategoryLocalSystemId = ls.LocalSystemId AND c.UserLevelCategoryName IS NULL
-		) EmptyCategories ON s.LocalSystemId = EmptyCategories.LocalSystemId
-    WHERE 
+	WHERE 
 		s.LocalSystemName IS NOT NULL
-		
 	GROUP BY 
 		s.LocalSystemId, 
-		s.LocalSystemName,
-		uc.UserLevelCategoryId,
-		uc.UserLevelCategoryName,
-		EmptyCategories.UserLevelCategoryId
-) AS UserProfileSettings
+		s.LocalSystemName
+) AS BranchSettings
+ORDER BY 
+	SystemId
+;
+
+SELECT 
+	s.LocalSystemId [SystemId],
+	s.LocalSystemName [SystemName],
+	uc.UserLevelCategoryId [CategoryId],
+	uc.UserLevelCategoryName [CategoryName] 
+FROM
+	[dbo].[UserAccess] ua 
+	INNER JOIN [dbo].[UserProfile] u ON ua.UserAccessUserProfileId = u.UserProfileId 
+	INNER JOIN [dbo].[UserLevelCategory] uc ON uc.UserLevelCategoryId = ua.UserAccessUserLevelCategoryId 
+	INNER JOIN [dbo].[LocalSystem] s ON s.LocalSystemId = ua.UserAccessLocalSystemId
+WHERE
+	u.UserProfileId = @userProfileId
+ORDER BY 
+	SystemId
+;
