@@ -232,29 +232,26 @@ FROM
             }
             return settings;
         }
-        public void DeleteUserData(int userProfileId)
+      
+        public void DeleteUserDetails(int UserProfileId)
         {
-            string querySystems =
-                @"
-                    UPDATE        
-                ";
+
+            string sqlUserAccess = "BEGIN UPDATE [dbo].[UserAccess] SET[UserAccessStatus] = -1 WHERE [UserAccessUserProfileId] = @userProfileId;",
+                   sqlUserSettings = "UPDATE [dbo].[LocalSystemBranch] SET[LocalSystemBranchStatus] = -1 WHERE [LocalSystemBranchUserProfileId] = @userProfileId;",
+                   sqlUserProfile = "UPDATE [dbo].[UserProfile] SET[UserProfileStatus] = -1 WHERE [UserProfileOperatorId] = @userProfileId; END;";
+
+            string sql = string.Format("{0}{1}{2}", sqlUserAccess,sqlUserSettings,sqlUserProfile);
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                connection.Open();
-
-                using (SqlDataAdapter sda = new SqlDataAdapter(querySystems, connection))
+                using (SqlCommand cmdUpdate = new SqlCommand(sql, connection))
                 {
-                    sda.SelectCommand.Parameters.AddWithValue("@userProfileId", userProfileId); //Prevent SQL Injection
-                    DataTable dt = new DataTable();
-                    sda.Fill(dt);
-                    if (dt.Rows.Count == 1 && dt.Rows[0] != null)
-                    {
-                   
-                    }
+                    cmdUpdate.Parameters.AddWithValue("@userProfileId", UserProfileId);
+                    connection.Open();
+                    int recs = cmdUpdate.ExecuteNonQuery();
                 }
+                
             }
-            
         }
 
         public void UpdateUserSystemSettings(AggregationBindingList<UserProfileSystemSetting> userSystemSettings)

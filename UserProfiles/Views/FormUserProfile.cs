@@ -13,20 +13,22 @@ namespace UserProfiles
     public partial class FormUserProfile : Form
     {
         public IRepository Repository { get; set; }
+        public int UserProfileId { get; set; } = 1;
+        
         public FormUserProfile()
         { 
             
             InitializeComponent();
             PreLoadOperations();
 
-            int userProfileId = 1;
+         
 
             Repository = new UserProfileRepository();
             //var systems = repository.GetSystems();
             //var branches = repository.GetBranches();
             List<UserLevelCategory> categories = Repository.GetUserLevelCategories();
-            UserProfile userProfile = Repository.GetUserProfile(userProfileId);
-            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(userProfileId);
+            UserProfile userProfile = Repository.GetUserProfile(UserProfileId);
+            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(UserProfileId);
 
             bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
             bindingSourceUserLevelCategory.DataSource = categories;
@@ -129,12 +131,19 @@ namespace UserProfiles
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Refresh();
+            
+            bindingSourceUserProfile.Clear();
+            bindingSourceUserProfileSystemSetting.Clear();
+            UserProfile userProfile = Repository.GetUserProfile(UserProfileId);
+            AggregationBindingList<UserProfileSystemSetting> userSystemSettings = Repository.GetSystemSettings(UserProfileId);
+
+            bindingSourceUserProfileSystemSetting.DataSource = userSystemSettings;
+            bindingSourceUserProfile.DataSource = userProfile;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            //DataTable changedRows = CT(dataGridViewUserSettings.DataSource, DataTable).GetChanges(DataRowState.Modified).Rows
+           Repository.DeleteUserDetails(UserProfileId);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
